@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Justin Kayce — Street, portrait, and live music photographer.">
+    <title>Justin Kayce | Photographer</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --text-color: #e8e8e8;
+            --muted-color: #888;
+            --accent-color: #c9a96e;
+            --font-body: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body.lightbox-open {
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        /* HERO */
+
+        .hero {
+            height: 80vh;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(3rem, 10vw, 5rem);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--muted-color);
+        }
+
+        /* PORTFOLIO */
+
+        .section-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--muted-color);
+            margin-bottom: 30px;
+            display: block;
+        }
+
+        .masonry {
+            column-count: 3;
+            column-gap: 4px;
+        }
+
+        .masonry-item {
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 4px;
+            overflow: hidden;
+            cursor: pointer;
+            break-inside: avoid;
+        }
+
+        .masonry-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .masonry-item:hover img {
+            transform: scale(1.02);
+        }
+
+        /* ABOUT */
+
+        .about-content {
+            max-width: 600px;
+            font-weight: 300;
+            font-size: 1.1rem;
+        }
+
+        .about-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .about-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        #about {
+            padding-bottom: 140px;
+        }
+
+        /* SERVICES */
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .service-card h3 {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .service-card .duration {
+            font-size: 0.85rem;
+            color: var(--muted-color);
+            margin-bottom: 5px;
+        }
+
+        .service-card .price {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+
+        .service-card .desc {
+            font-size: 0.85rem;
+            color: var(--muted-color);
+            line-height: 1.4;
+        }
+
+        .cta-container {
+            text-align: center;
+        }
+
+        .btn-book {
+            display: inline-block;
+            padding: 15px 40px;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .btn-book:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+            padding: 60px 0 30px;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        .footer-links {
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 0.8rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .copyright {
+            font-size: 0.7rem;
+            color: var(--muted-color);
+        }
+
+        /* FADE IN */
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* FULLSCREEN PHOTO VIEWER */
+
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.97);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            opacity: 0;
+            visibility: hidden;
+
+            transition:
+                opacity 0.25s ease,
+                visibility 0.25s ease;
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox-image {
+            max-width: 90vw;
+            max-height: 90vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .lightbox-close,
+        .lightbox-prev,
+        .lightbox-next {
+            position: absolute;
+            border: none;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            z-index: 2;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .lightbox-close {
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            font-weight: 200;
+            line-height: 1;
+            opacity: 0.7;
+        }
+
+        .lightbox-prev,
+        .lightbox-next {
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 50px;
+            padding: 20px;
+            opacity: 0.7;
+        }
+
+        .lightbox-prev {
+            left: 20px;
+        }
+
+        .lightbox-next {
+            right: 20px;
+        }
+
+        .lightbox-close:hover,
+        .lightbox-prev:hover,
+        .lightbox-next:hover {
+            opacity: 1;
+        }
+
+        .lightbox-counter {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1024px) {
+            .masonry {
+                column-count: 2;
+            }
+
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .masonry {
+                column-count: 1;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                min-height: 450px;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero p {
+                font-size: 0.7rem;
+                letter-spacing: 2px;
+            }
+
+            #about {
+                padding-bottom: 100px;
+            }
+
+            section {
+                padding: 60px 0;
+            }
+
+            .lightbox-image {
+                max-width: 94vw;
+                max-height: 85vh;
+            }
+
+            .lightbox-prev,
+            .lightbox-next {
+                font-size: 35px;
+                padding: 10px;
+            }
+
+            .lightbox-prev {
+                left: 5px;
+            }
+
+            .lightbox-next {
+                right: 5px;
+            }
+
+            .lightbox-close {
+                top: 15px;
+                right: 20px;
+                font-size: 32px;
+            }
+
+            .lightbox-counter {
+                bottom: 15px;
+            }
+        }
+
+        /* REDUCED MOTION */
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            .reveal {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+
+            .masonry-item img {
+                transition: none;
+            }
+
+            .lightbox {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HERO -->
+
+    <header class="hero">
+        <div class="container">
+            <h1>Justin Kayce</h1>
+            <p>Photographer — Southeastern United States</p>
+        </div>
+    </header>
+
+
+    <main class="container">
+
+        <!-- PORTFOLIO -->
+
+        <section id="portfolio">
+
+            <span class="section-label">Street</span>
+
+            <div class="masonry">
+
+                <div class="masonry-item">
+                    <img
+                        src="images/1.webp"
+                        alt="Urban street scene with deep shadows"
+                        loading="lazy"
+                    >
+                </div>
+
+                <div class="masonry-item">
+                    <img
+                        src="images/2.webp"
+                        alt="Candid shot of a pedestrian in the rain"
+                        loading="lazy"
+                    >
+                </div>
+
+                <div class="masonry-item">
+                    <img
+                        src="images/3.webp"
+                        alt="Neon lights reflecting in a puddle"
+                        loading="lazy"
+                    >
+                </div>
+
+                <div class="masonry-item">
+                    <img
+                        src="images/4.webp"
+                        alt="Architectural detail of a brutalist building"
+                        loading="lazy"
+                    >
+                </div>
+
+                <div class="masonry-item">
+                    <img
+                        src="images/5.webp"
+                        alt="Silhouetted figure crossing a busy intersection"
+                        loading="lazy"
+                    >
+                </div>
+
+                <div class="masonry-item">
+                    <img
+                        src="images/6.webp"
+                        alt="Close up of a vintage car on a city street"
+                        loading="lazy"
+                    >
+                </div>
+
+                <div class="masonry-item">
+                    <img
+                        src="images/7.webp"
+                        alt="Abstract view of a subway entrance"
+                        loading="lazy"
+                    >
+                </div>
+
+                <div class="masonry-item">
+                    <img
+                        src="images/8.webp"
+                        alt="Lonely street lamp in early morning fog"
+                        loading="lazy"
+                    >
+                </div>
+
+                <div class="masonry-item">
+                    <img
+                        src="images/9.webp"
+                        alt="Market stall with vibrant produce"
+                        loading="lazy"
+                    >
+                </div>
+
+                <div class="masonry-item">
+                    <img
+                        src="images/10.webp"
+                        alt="Crowd of people blurred by motion"
+                        loading="lazy"
+                    >
+                </div>
+
+                <div class="masonry-item">
+                    <img
+                        src="images/11.webp"
+                        alt="Empty alleyway with brick walls"
+                        loading="lazy"
+                    >
+                </div>
+
+                <div class="masonry-item">
+                    <img
+                        src="images/12.webp"
+                        alt="High contrast shot of a skyscraper against a dark sky"
+                        loading="lazy"
+                    >
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ABOUT -->
+
+        <section id="about" class="container reveal">
+
+            <div class="about-content">
+
+                <p>
+                    I photograph the moments that are easy to miss. The look that lasts a second,
+                    a quiet gesture, the way the light hits someone’s face, or something happening
+                    in the background that you might not notice at first.
+                </p>
+
+                <p>
+                    I photograph portraits, weddings, live music, events, and documentary work.
+                    The subjects are different, but the idea is pretty simple: show up, pay attention,
+                    and be ready when something happens.
+                </p>
+
+                <p>
+                    I’m not interested in forcing moments or making things feel overly staged.
+                    I’d rather let things happen naturally, stay out of the way, and make photographs
+                    that feel honest.
+                </p>
+
+                <p>
+                    If you have something worth photographing, let’s talk.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- SESSIONS -->
+
+        <section class="container reveal">
+
+            <span class="section-label">Sessions</span>
+
+            <div class="services-grid">
+
+                <div class="service-card">
+
+                    <h3>Portrait</h3>
+
+                    <p class="duration">
+                        1 hour
+                    </p>
+
+                    <p class="price">
+                        From $200
+                    </p>
+
+                    <p class="desc">
+                        Headshots, personal, or creative. Studio or location.
+                    </p>
+
+                </div>
+
+
+                <div class="service-card">
+
+                    <h3>Live Music</h3>
+
+                    <p class="duration">
+                        2–4 hours
+                    </p>
+
+                    <p class="price">
+                        From $400
+                    </p>
+
+                    <p class="desc">
+                        Concerts, shows, sessions. I know how to work in low light
+                        without getting in the band's way.
+                    </p>
+
+                </div>
+
+
+                <div class="service-card">
+
+                    <h3>Event</h3>
+
+                    <p class="duration">
+                        3+ hours
+                    </p>
+
+                    <p class="price">
+                        Custom
+                    </p>
+
+                    <p class="desc">
+                        Weddings, parties, private events. Let's talk scope.
+                    </p>
+
+                </div>
+
+
+                <div class="service-card">
+
+                    <h3>Consultation</h3>
+
+                    <p class="duration">
+                        15 min
+                    </p>
+
+                    <p class="price">
+                        Free
+                    </p>
+
+                    <p class="desc">
+                        Not sure what you need? Let's figure it out together.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="cta-container">
+
+                <a
+                    href="https://cal.com/justinkayce/book"
+                    class="btn-book"
+                >
+                    Book a Session
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div class="container">
+
+            <div class="footer-links">
+
+                <a href="mailto:your@email.com">
+                    Email
+                </a>
+
+                <a
+                    href="https://instagram.com/justinkayce"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Instagram
+                </a>
+
+            </div>
+
+            <p class="copyright">
+                &copy; 2026 Justin Kayce. All rights reserved.
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <!-- FULLSCREEN PHOTO VIEWER -->
+
+    <div
+        class="lightbox"
+        id="lightbox"
+        aria-hidden="true"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Photo viewer"
+    >
+
+        <button
+            class="lightbox-close"
+            id="lightboxClose"
+            aria-label="Close photo viewer"
+            type="button"
+        >
+            &times;
+        </button>
+
+
+        <button
+            class="lightbox-prev"
+            id="lightboxPrev"
+            aria-label="Previous photo"
+            type="button"
+        >
+            &#10094;
+        </button>
+
+
+        <img
+            class="lightbox-image"
+            id="lightboxImage"
+            src=""
+            alt=""
+        >
+
+
+        <button
+            class="lightbox-next"
+            id="lightboxNext"
+            aria-label="Next photo"
+            type="button"
+        >
+            &#10095;
+        </button>
+
+
+        <div
+            class="lightbox-counter"
+            id="lightboxCounter"
+            aria-live="polite"
+        >
+            1 / 12
+        </div>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            /* FADE-IN EFFECT */
+
+            const observerOptions = {
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver(
+                (entries) => {
+
+                    entries.forEach(entry => {
+
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                        }
+
+                    });
+
+                },
+                observerOptions
+            );
+
+            document
+                .querySelectorAll('.reveal')
+                .forEach(element => {
+                    observer.observe(element);
+                });
+
+
+            /* PHOTO VIEWER */
+
+            const photos = Array.from(
+                document.querySelectorAll('.masonry-item img')
+            );
+
+            const lightbox =
+                document.getElementById('lightbox');
+
+            const lightboxImage =
+                document.getElementById('lightboxImage');
+
+            const closeButton =
+                document.getElementById('lightboxClose');
+
+            const prevButton =
+                document.getElementById('lightboxPrev');
+
+            const nextButton =
+                document.getElementById('lightboxNext');
+
+            const counter =
+                document.getElementById('lightboxCounter');
+
+            let currentIndex = 0;
+
+
+            /* UPDATE PHOTO */
+
+            function updatePhoto() {
+
+                const photo = photos[currentIndex];
+
+                lightboxImage.src = photo.src;
+                lightboxImage.alt = photo.alt;
+
+                counter.textContent =
+                    `${currentIndex + 1} / ${photos.length}`;
+            }
+
+
+            /* OPEN */
+
+            function openLightbox(index) {
+
+                currentIndex = index;
+
+                updatePhoto();
+
+                lightbox.classList.add('active');
+
+                lightbox.setAttribute(
+                    'aria-hidden',
+                    'false'
+                );
+
+                document.body.classList.add(
+                    'lightbox-open'
+                );
+
+                closeButton.focus();
+            }
+
+
+            /* CLOSE */
+
+            function closeLightbox() {
+
+                lightbox.classList.remove('active');
+
+                lightbox.setAttribute(
+                    'aria-hidden',
+                    'true'
+                );
+
+                document.body.classList.remove(
+                    'lightbox-open'
+                );
+
+                setTimeout(() => {
+
+                    if (!lightbox.classList.contains('active')) {
+                        lightboxImage.src = '';
+                    }
+
+                }, 250);
+            }
+
+
+            /* NEXT */
+
+            function showNext() {
+
+                currentIndex =
+                    (currentIndex + 1) % photos.length;
+
+                updatePhoto();
+            }
+
+
+            /* PREVIOUS */
+
+            function showPrevious() {
+
+                currentIndex =
+                    (currentIndex - 1 + photos.length)
+                    % photos.length;
+
+                updatePhoto();
+            }
+
+
+            /* CLICK PHOTO */
+
+            photos.forEach((photo, index) => {
+
+                photo.parentElement.addEventListener(
+                    'click',
+                    () => {
+                        openLightbox(index);
+                    }
+                );
+
+            });
+
+
+            /* BUTTONS */
+
+            closeButton.addEventListener(
+                'click',
+                closeLightbox
+            );
+
+            nextButton.addEventListener(
+                'click',
+                (event) => {
+
+                    event.stopPropagation();
+
+                    showNext();
+
+                }
+            );
+
+            prevButton.addEventListener(
+                'click',
+                (event) => {
+
+                    event.stopPropagation();
+
+                    showPrevious();
+
+                }
+            );
+
+
+            /* CLICK BACKGROUND TO CLOSE */
+
+            lightbox.addEventListener(
+                'click',
+                (event) => {
+
+                    if (event.target === lightbox) {
+                        closeLightbox();
+                    }
+
+                }
+            );
+
+
+            /* KEYBOARD CONTROLS */
+
+            document.addEventListener(
+                'keydown',
+                (event) => {
+
+                    if (!lightbox.classList.contains('active')) {
+                        return;
+                    }
+
+                    if (event.key === 'Escape') {
+                        closeLightbox();
+                    }
+
+                    if (event.key === 'ArrowRight') {
+                        showNext();
+                    }
+
+                    if (event.key === 'ArrowLeft') {
+                        showPrevious();
+                    }
+
+                }
+            );
+
+
+            /* MOBILE SWIPE */
+
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            lightbox.addEventListener(
+                'touchstart',
+                (event) => {
+
+                    touchStartX =
+                        event.changedTouches[0].screenX;
+
+                },
+                { passive: true }
+            );
+
+            lightbox.addEventListener(
+                'touchend',
+                (event) => {
+
+                    touchEndX =
+                        event.changedTouches[0].screenX;
+
+                    const swipeDistance =
+                        touchEndX - touchStartX;
+
+                    if (Math.abs(swipeDistance) < 50) {
+                        return;
+                    }
+
+                    if (swipeDistance < 0) {
+                        showNext();
+                    } else {
+                        showPrevious();
+                    }
+
+                },
+                { passive: true }
+            );
+
+        });
+    </script>
+
+</body>
+</html>
+
